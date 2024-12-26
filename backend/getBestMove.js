@@ -236,11 +236,11 @@ const mostPlayedNextMoves = (games,stringHistory) => {
         }
     })
     let maxMovesIndex=5;
-    if (stringHistory.indexOf("4.")!==-1){
-        maxMovesIndex=1
-    }
     if (stringHistory.indexOf("2. ")!==-1){
         maxMovesIndex=2
+    }
+    if (stringHistory.indexOf("4.")!==-1){
+        maxMovesIndex=1
     }
     const movesArray = Object.entries(moves)
     .sort(([, value1], [, value2]) => value2 - value1)
