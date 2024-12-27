@@ -131,7 +131,7 @@ const Chessboard = ({ setDrawOffered, drawOfferStatus, setDrawOfferStatus, drawO
                     <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className={`w-[70px] h-[70px] border-black hover:border-[2px] ${bgColor} relative flex justify-center items-center ${chess.inCheck() && chess.get(square).type == "k" && chess.get(square).color === chess.turn() && "bg-red-500"} ${chess.isGameOver() && (chess.get(square).type && chess.get(square).color !== chess.turn() ? "opacity-100" : "opacity-60")}`}
+                        className={`w-[40px] h-[40px] md:w-[50px] md:h-[50px] lg:w-[60px] lg:h-[60px] xl:w-[70px] xl:h-[70px] border-black hover:border-[2px] ${bgColor} relative flex justify-center items-center ${chess.inCheck() && chess.get(square).type == "k" && chess.get(square).color === chess.turn() && "bg-red-500"} ${chess.isGameOver() && (chess.get(square).type && chess.get(square).color !== chess.turn() ? "opacity-100" : "opacity-60")}`}
                         key={square}
                         onClick={() => {
                             if (!chess.isGameOver()) {
@@ -191,7 +191,7 @@ const Chessboard = ({ setDrawOffered, drawOfferStatus, setDrawOfferStatus, drawO
                                 }
                             }
                         }}>
-                        <span className={`font-[rajdhani] text-white-600 text-[16px] absolute ${color!=="b" ? "bottom-[0.5px] left-[5px]" : "top-[0.5px] right-[5px]"}`}>
+                        <span className={`font-[rajdhani] text-white-600 text-[8px] md:text-[16px]  absolute ${color!=="b" ? "bottom-[0.5px] left-[5px]" : "top-[0.5px] right-[5px]"}`}>
                 {i > 55 && square.split("")[0]}
                 {i % 8 == 0 && square.split("")[1]}
             </span>
@@ -222,27 +222,41 @@ const Chessboard = ({ setDrawOffered, drawOfferStatus, setDrawOfferStatus, drawO
     })
     return (
 <DragDropContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
-    <div className={`flex flex-wrap max-w-[560px] `}>
-        {color==="b" ? board.reverse() : board}
-    </div>
-    <div className="flex flex-col gap-[25px]">
-        {(!drawOfferStatus || drawOfferStatus==="offered") && gameStarted && !chess.isGameOver() && !abondoned && <button 
-        onClick={() => {
-            socket.send(JSON.stringify({type:"resign"}))
-            setBoard(new Chess())
-            setPiecesState(new Chess().board().flat())
-            setGameStarted(false)
-            setLastTwoSquares([])
-            setPossibleSquares([])
-        }}
-        className="text-[#EBECD0] hover:opacity-70 text-center text-[24px] py-5 px-[150px] rounded-[30px] bg-[#638e37]">Resign</button>}
-        {!drawOffered && drawOfferStatus!=="offered" && !drawOfferStatus && gameStarted && !chess.isGameOver() && !abondoned && <button 
-        onClick={() => {
-            socket.send(JSON.stringify({type:"drawoffer"}))
-            setDrawOfferStatus("offered")
-        }}
-        className="text-[#EBECD0] hover:opacity-70 text-center text-[24px] py-5 px-[150px] rounded-[30px] bg-[#638e37]">Offer Draw</button>}
-        {isPromoting && (
+    <div className="flex flex-col lg:flex-row items-center gap-[38px]">
+        <div className={`flex flex-wrap w-[320px] md:w-[400px] lg:w-[480px] xl:w-[560px]`}>
+            {color==="b" ? board.reverse() : board}
+        </div>
+        <div className="flex flex-col gap-[25px]">
+            {!abondoned && gameStarted && !chess.isGameOver() && drawOffered && (
+                <div className="flex rounded-[30px] flex-col bg-[#262522] items-center justify-center p-6 space-y-4">
+        <h2 className="text-2xl font-semibold text-center text-[#EBECD0]">Do you accept a draw offer?</h2>
+        <div className="space-x-4">
+            <button
+            className="px-6 py-2 bg-[#638e37] text-[#EBECD0] font-semibold rounded-lg hover:opacity-70 transition"
+            onClick={() => {
+                socket.send(JSON.stringify({type:"drawaccepted"}))
+                setDrawOfferStatus(true)
+                setDrawOffered(false)
+                setBoard(new Chess())
+                setPiecesState(new Chess().board().flat())
+            }}
+            >
+            Yes
+            </button>
+            <button
+            className="px-6 py-2 bg-[#638e37] text-[#EBECD0] font-semibold rounded-lg hover:opacity-70 transition"
+            onClick={() => {
+                socket.send(JSON.stringify({type:"drawrejected"}))
+                setDrawOfferStatus(false)
+                setDrawOffered(false)
+            }}
+            >
+            No
+            </button>
+        </div>
+                </div>
+            )}
+            {isPromoting && (
             <div className="max-w-md mx-auto p-6 bg-[#262522] rounded-lg shadow-md">
                 <h2 className="text-3xl font-semibold text-center text-[#EBECD0] mb-6">Which piece do you want to promote to?</h2>
                 <div className="grid grid-cols-2 gap-4">
@@ -273,36 +287,26 @@ const Chessboard = ({ setDrawOffered, drawOfferStatus, setDrawOfferStatus, drawO
                     >
                         <span className="font-bold">Knight <img src={`../assets/${color}n.png`} alt="" width={60} /></span>
                     </button>
-                </div></div>)}
-        {!abondoned && gameStarted && !chess.isGameOver() && drawOffered && (
-            <div className="flex rounded-[30px] flex-col bg-[#262522] items-center justify-center p-6 space-y-4">
-      <h2 className="text-2xl font-semibold text-[#EBECD0]">Do you accept a draw offer?</h2>
-      <div className="space-x-4">
-        <button
-        className="px-6 py-2 bg-[#638e37] text-[#EBECD0] font-semibold rounded-lg hover:opacity-70 transition"
-        onClick={() => {
-            socket.send(JSON.stringify({type:"drawaccepted"}))
-            setDrawOfferStatus(true)
-            setDrawOffered(false)
-            setBoard(new Chess())
-            setPiecesState(new Chess().board().flat())
-        }}
-        >
-          Yes
-        </button>
-        <button
-        className="px-6 py-2 bg-[#638e37] text-[#EBECD0] font-semibold rounded-lg hover:opacity-70 transition"
-        onClick={() => {
-            socket.send(JSON.stringify({type:"drawrejected"}))
-            setDrawOfferStatus(false)
-            setDrawOffered(false)
-        }}
-        >
-          No
-        </button>
-      </div>
+            </div></div>)}
+            <div className="flex flex-row lg:flex-col gap-[30px] items-center justify-center">
+                {(!drawOfferStatus || drawOfferStatus==="offered") && gameStarted && !chess.isGameOver() && !abondoned && <button 
+                onClick={() => {
+                    socket.send(JSON.stringify({type:"resign"}))
+                    setBoard(new Chess())
+                    setPiecesState(new Chess().board().flat())
+                    setGameStarted(false)
+                    setLastTwoSquares([])
+                    setPossibleSquares([])
+                }}
+                className="text-[#EBECD0] hover:opacity-70 text-center text-[18px] lg:text-[24px] py-[18px] lg:py-5 px-[30px] lg:px-[150px] rounded-[30px] bg-[#638e37]">Resign</button>}
+                {!drawOffered && drawOfferStatus!=="offered" && !drawOfferStatus && gameStarted && !chess.isGameOver() && !abondoned && <button 
+                onClick={() => {
+                    socket.send(JSON.stringify({type:"drawoffer"}))
+                    setDrawOfferStatus("offered")
+                }}
+                className="text-[#EBECD0] hover:opacity-70 text-center text-[18px] lg:text-[24px] py-[18px] lg:py-5 px-[15px] lg:px-[127px] rounded-[30px] bg-[#638e37]">Offer Draw</button>}
             </div>
-        )}
+        </div>
     </div>
 </DragDropContext>
     );

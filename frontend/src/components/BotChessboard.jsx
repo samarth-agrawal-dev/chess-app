@@ -132,7 +132,7 @@ const BotChessboard = ({ socket, chess, setGameStarted, gameStarted, piecesState
                     <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className={`w-[70px] h-[70px] border-black hover:border-[2px] ${bgColor} relative flex justify-center items-center ${chess.inCheck() && chess.get(square).type == "k" && chess.get(square).color === chess.turn() && "bg-red-500"} ${chess.isGameOver() && (chess.get(square).type && chess.get(square).color !== chess.turn() ? "opacity-100" : "opacity-60")}`}
+                        className={`w-[40px] h-[40px] md:w-[50px] md:h-[50px] lg:w-[60px] lg:h-[60px] xl:w-[70px] xl:h-[70px] border-black hover:border-[2px] ${bgColor} relative flex justify-center items-center ${chess.inCheck() && chess.get(square).type == "k" && chess.get(square).color === chess.turn() && "bg-red-500"} ${chess.isGameOver() && (chess.get(square).type && chess.get(square).color !== chess.turn() ? "opacity-100" : "opacity-60")}`}
                         key={square}
                         onClick={() => {
                             if (!chess.isGameOver()) {
@@ -196,7 +196,7 @@ const BotChessboard = ({ socket, chess, setGameStarted, gameStarted, piecesState
                                 }
                             }
                         }}>
-                        <span className={`font-[rajdhani] text-white-600 text-[16px] absolute bottom-[0.5px] left-[2px]`}>
+                        <span className={`font-[rajdhani] text-white-600 text-[8px] md:text-[16px] absolute bottom-[0.5px] left-[2px]`}>
                             {i > 55 && square.split("")[0]}
                             {i % 8 == 0 && square.split("")[1]}
                         </span>
@@ -227,11 +227,12 @@ const BotChessboard = ({ socket, chess, setGameStarted, gameStarted, piecesState
     })
     return (
         <DragDropContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
-            <div className={`flex flex-wrap max-w-[560px] `}>
-                {board}
-            </div>
-            <div className="flex flex-col gap-[25px]">
-                {gameStarted && !chess.isGameOver() && <button
+            <div className="flex flex-col lg:flex-row items-center gap-[38px]">
+                <div className={`flex flex-wrap w-[320px] md:w-[400px] lg:w-[480px] xl:w-[560px]`}>
+                    {board}
+                </div>
+                <div className="flex flex-col gap-[25px] items-center">
+                    {gameStarted && !chess.isGameOver() && <button
                     onClick={() => {
                         socket.send(JSON.stringify({
                             type:"botgameresign"
@@ -243,39 +244,40 @@ const BotChessboard = ({ socket, chess, setGameStarted, gameStarted, piecesState
                         setPossibleSquares([])
                         new Audio(gameOverSound).play()
                     }}
-                    className="text-[#EBECD0] hover:opacity-70 text-center text-[24px] py-5 px-[150px] rounded-[30px] bg-[#638e37]">Resign</button>}
-                {isPromoting && (
-                    <div className="max-w-md mx-auto p-6 bg-[#262522] rounded-lg shadow-md">
-                        <h2 className="text-3xl font-semibold text-center text-[#EBECD0] mb-6">Which piece do you want to promote to?</h2>
-                        <div className="grid grid-cols-2 gap-4">
-                            <button
-                                onClick={() => handleButtonClick("q")}
-                                className="flex items-center justify-center w-full py-3 text-[#EBECD0] bg-[#739552] rounded-md hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-[#baf487] transition duration-200 ease-in-out"
-                            >
-                                <span className="font-bold">Queen <img src={`../assets/wq.png`} alt="" width={60} /></span>
-                            </button>
+                    className="text-[#EBECD0] hover:opacity-70 text-center text-[18px] lg:text-[24px] py-[18px] lg:py-5 px-[70px] lg:px-[150px] rounded-[30px] bg-[#638e37]">Resign</button>}
+                    {isPromoting && (
+                        <div className="max-w-md mx-auto p-6 bg-[#262522] rounded-lg shadow-md">
+                            <h2 className="text-3xl font-semibold text-center text-[#EBECD0] mb-6">Which piece do you want to promote to?</h2>
+                            <div className="grid grid-cols-2 gap-4">
+                                <button
+                                    onClick={() => handleButtonClick("q")}
+                                    className="flex items-center justify-center w-full py-3 text-[#EBECD0] bg-[#739552] rounded-md hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-[#baf487] transition duration-200 ease-in-out"
+                                >
+                                    <span className="font-bold">Queen <img src={`../assets/wq.png`} alt="" width={60} /></span>
+                                </button>
 
-                            <button
-                                onClick={() => handleButtonClick("r")}
-                                className="flex items-center justify-center w-full py-3 text-[#EBECD0] bg-[#739552] rounded-md hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-[#baf487] transition duration-200 ease-in-out"
-                            >
-                                <span className="font-bold">Rook <img src={`../assets/wr.png`} alt="" width={60} /></span>
-                            </button>
+                                <button
+                                    onClick={() => handleButtonClick("r")}
+                                    className="flex items-center justify-center w-full py-3 text-[#EBECD0] bg-[#739552] rounded-md hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-[#baf487] transition duration-200 ease-in-out"
+                                >
+                                    <span className="font-bold">Rook <img src={`../assets/wr.png`} alt="" width={60} /></span>
+                                </button>
 
-                            <button
-                                onClick={() => handleButtonClick("b")}
-                                className="flex items-center justify-center w-full py-3 text-[#EBECD0] bg-[#739552] rounded-md hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-[#baf487] transition duration-200 ease-in-out"
-                            >
-                                <span className="font-bold">Bishop <img src={`../assets/wb.png`} alt="" width={60} /></span>
-                            </button>
+                                <button
+                                    onClick={() => handleButtonClick("b")}
+                                    className="flex items-center justify-center w-full py-3 text-[#EBECD0] bg-[#739552] rounded-md hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-[#baf487] transition duration-200 ease-in-out"
+                                >
+                                    <span className="font-bold">Bishop <img src={`../assets/wb.png`} alt="" width={60} /></span>
+                                </button>
 
-                            <button
-                                onClick={() => handleButtonClick("n")}
-                                className="flex items-center justify-center w-full py-3 text-[#EBECD0] bg-[#739552] rounded-md hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-[#baf487] transition duration-200 ease-in-out"
-                            >
-                                <span className="font-bold">Knight <img src={`../assets/wn.png`} alt="" width={60} /></span>
-                            </button>
-                        </div></div>)}
+                                <button
+                                    onClick={() => handleButtonClick("n")}
+                                    className="flex items-center justify-center w-full py-3 text-[#EBECD0] bg-[#739552] rounded-md hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-[#baf487] transition duration-200 ease-in-out"
+                                >
+                                    <span className="font-bold">Knight <img src={`../assets/wn.png`} alt="" width={60} /></span>
+                                </button>
+                            </div></div>)}
+                </div>
             </div>
         </DragDropContext>
     )

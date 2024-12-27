@@ -30,6 +30,7 @@ const Game = () => {
         case "game_abondoned":
           await new Audio(gameOver).play()
           setAbondoned(true)
+          setDrawOfferStatus(true)
           break
         case "connecting":
           setConnected(false)
@@ -57,7 +58,7 @@ const Game = () => {
   return (
     <>
     {!connected && <div className="bg-[#302E2B] min-h-screen min-w-screen flex flex-col justify-center items-center text-white font-[arial] text-[30px] font-bold"><DotLoader/></div>}
-    {connected && <div className="bg-[#302E2B] min-h-screen p-16 min-w-screen flex items-center justify-around">
+    {connected && <div className="bg-[#302E2B] min-h-screen min-w-screen flex items-center justify-center lg:justify-around flex-col gap-[18px] lg:flex-row">
       <Chessboard setDrawOffered={setDrawOffered} setDrawOfferStatus={setDrawOfferStatus} drawOfferStatus={drawOfferStatus} chess={board} drawOffered={drawOffered} setGameStarted={setGameStarted} socket = {socket} gameStarted={gameStarted} setBoard={setBoard} abondoned={abondoned} piecesState={piecesState} setPiecesState={setPiecesState} color={color}/>
       {!gameStarted && <button className="bg-[#81B64C] text-center w-[280px] p-3 rounded-[30px] hover:opacity-85 font-bold font-[arial] text-white text-[38px]"
       onClick={() => {

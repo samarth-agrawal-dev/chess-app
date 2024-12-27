@@ -21,7 +21,7 @@ const Game = () => {
   },[socket,board])
   return (
     <>
-    <div className="bg-[#302E2B] min-h-screen p-16 min-w-screen flex items-center justify-around">
+    <div className="bg-[#302E2B] min-h-screen min-w-screen flex items-center justify-center lg:justify-around flex-col gap-[18px] lg:flex-row">
       <BotChessboard chess={board} socket={socket} setGameStarted={setGameStarted} gameStarted={gameStarted} setBoard={setBoard} piecesState={piecesState} setPiecesState={setPiecesState}/>
       {!gameStarted && <button className="bg-[#81B64C] text-center w-[280px] p-3 rounded-[30px] hover:opacity-85 font-bold font-[arial] text-white text-[38px]"
       onClick={() => {
