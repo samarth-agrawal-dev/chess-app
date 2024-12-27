@@ -250,17 +250,14 @@ const mostPlayedNextMoves = (games,stringHistory) => {
 }
 const getBestMove = async (game, depth) => {
     const stringHistory = convertMovesToString(game.history())
-    console.log(stringHistory)
     if (stringHistory.trim()==="1. e4"){
         const moves = [ 'e5', 'c5', 'e6', 'd5', 'c6' ];
         const randomIndex = Math.floor(Math.random()*moves.length)
         return moves[randomIndex]
     }
     const games = await Game.find({ moves : { $regex: `^${stringHistory}`}});
-    console.log(`${games.length} such games in the database.`)
     if (games.length && games.length>50){
         const nextMoves = mostPlayedNextMoves(games,stringHistory)
-        console.log(nextMoves)
         const randomIndex = Math.floor(Math.random()*nextMoves.length)
         if (game.moves().indexOf(nextMoves[randomIndex])!==-1){
             return nextMoves[randomIndex]
