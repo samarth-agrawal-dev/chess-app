@@ -9,9 +9,9 @@ db.on("error", console.error.bind(console, 'connection error:'));
 db.once("open", () => {
     console.log("Database connected")
 })
-const filePath = "C://filePathForChessPgn"; // you should install games pgn from chess.com or lichess database
+const filePath = "filePathForChessPgn"; // you should install games pgn from chess.com or lichess database
 let gameCount = 0;
-const batchSize = 2500;
+const batchSize = 5000;
 let moves
 let gamesToInsert = [];
 const insertGamesToDB = async () => {
