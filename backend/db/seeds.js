@@ -9,7 +9,7 @@ db.on("error", console.error.bind(console, 'connection error:'));
 db.once("open", () => {
     console.log("Database connected")
 })
-const filePath = "./backend/db/lichess_db_standard_rated_2014-12.pgn";
+const filePath = "C://filePathForChessPgn"; // you should install games pgn from chess.com or lichess database
 let gameCount = 0;
 const batchSize = 2500;
 let moves
@@ -42,7 +42,7 @@ rl.on('line', async (line) => {
   if (gamesToInsert.length >= batchSize) {
     await insertGamesToDB();
   }
-  if (gameCount>1500000){
+  if (gameCount>1500000){ // program shall stop after inserting 1500000 games into database. This may take a couple of hours.
     rl.close()
   }
   }
